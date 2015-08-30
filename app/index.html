@@ -1,0 +1,345 @@
+<!doctype html>
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<html lang="">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Polymer Starter Kit" />
+  <title>Car Lightouse</title>
+  <!-- Place favicon.ico in the `app/` directory -->
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+
+  <!-- Chrome for Android theme color -->
+  <meta name="theme-color" content="#303F9F">
+
+  <!-- Web Application Manifest -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Tile color for Win8 -->
+  <meta name="msapplication-TileColor" content="#3372DF">
+
+  <!-- Add to homescreen for Chrome on Android -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="PSK">
+  <link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">
+
+  <!-- Add to homescreen for Safari on iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+  <link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">
+
+  <!-- Tile icon for Win8 (144x144) -->
+  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+  <!-- build:css styles/main.css -->
+  <link rel="stylesheet" href="styles/main.css">
+  <!-- endbuild-->
+
+  <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+  <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+  <!-- endbuild -->
+
+  <!-- will be replaced with elements/elements.vulcanized.html -->
+  <link rel="import" href="elements/elements.html">
+  <!-- endreplace-->
+</head>
+
+<body unresolved class="fullbleed layout vertical">
+
+  <span id="browser-sync-binding"></span>
+  
+  <template is="dom-bind" id="app">
+
+    <!-- Main Area -->
+    <paper-header-panel mode="seamed">
+
+      <!-- Main Toolbar -->
+      <paper-toolbar id="mainToolbar">
+
+        <span class="flex"></span>
+
+        <!-- Sign In Button -->
+        <google-signin-button  on-google-button-clicked="signInClicked" signed-in="[[signedIn]]"></google-signin-button>
+
+        <!-- Application name -->
+        <div class="middle center horizontal layout">
+
+          <template is="dom-if" if="[[!isMobile]]">
+
+            <div class="app-name">Car Lighthouse</div>
+
+          </template>
+
+        </div>
+
+      </paper-toolbar>
+
+      <!-- Main Content -->
+      <div class="content">
+        <iron-pages attr-for-selected="data-route" selected="{{route}}">
+
+          <section data-route="home">     
+
+            <!-- Firebase helpers -->
+            <firebase-auth id="firebaseLogin" location="[[firebaseUrl]]" provider="google" user="{{user}}" on-login="loggedIn" on-logout="loggedOut"></firebase-auth>
+
+            <firebase-document location="[[carDocumentUrl]]" data="{{carLocation}}" on-firebase-value="setCarLocation" id="firebaseCarLocation"></firebase-document>
+
+            <firebase-document location="[[noteDocumentUrl]]" data="{{note}}" on-firebase-value="setNote"></firebase-document>
+            <!-- End firebase helpers -->
+
+            <div class="grid-container">
+
+              <template is="dom-if" if="[[isMobile]]">
+
+                <div class="row vert-space">
+
+                  <span class="col-10 center displayContent">
+
+                    <b>Car Lighthouse</b>
+
+                  </span>
+
+                </div>
+
+              </template>
+
+              <div class="row vert-space">
+
+                <span class="col-10 center">
+
+                  <template is="dom-if" if="[[isMobile]]">
+
+                    <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=9&l=ez&f=ifr&f=ifr&linkID=DQGNXMWNPMNATOXY&internal=1" width="180" height="150" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
+
+                  </template>
+
+                  <template is="dom-if" if="[[!isMobile]]">
+
+                    <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=13&l=ez&f=ifr&f=ifr&linkID=ZEWXDMQACYX7JH4D&internal=1" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
+
+                  </template>
+
+                </span>
+
+             </div>
+
+            </div>   
+
+            <paper-material elevation="1">
+
+              <div class="grid-container">
+
+                <div class="row">
+
+                  <span class="col-8">
+
+                    &nbsp;
+
+                  </span>
+
+                  <span class="col-1">
+
+                    <template is="dom-if" if="[[carLocationSet]]">
+
+                      <iron-icon icon="done" disabled$="[[!carLocation]]" class="green" ></iron-icon>
+
+                    </template>
+
+                    <template is="dom-if" if="[[!carLocationSet]]">
+
+                      <iron-icon icon="done" disabled$="[[!carLocation]]" class="red"></iron-icon>
+
+                    </template>
+
+                    <paper-tooltip>Car location set</paper-tooltip>
+
+                  </span>
+
+                  <span class="col-1">
+
+                    <template is="dom-if" if="[[userLocationSet]]">
+
+                      <iron-icon icon="done" disabled$="[[!userLocation]]" class="green" ></iron-icon>
+
+                    </template>
+
+                    <template is="dom-if" if="[[!userLocationSet]]">
+
+                      <iron-icon icon="done" disabled$="[[!userLocation]]" class="red" ></iron-icon>
+
+                    </template>
+
+                    <paper-tooltip>User location set</paper-tooltip>
+
+                  </span>
+
+                </div>
+
+                <div class="row vert-space">
+
+                  <span class="col-8 display-content">
+
+                    <b>Update your car's location:</b>
+
+                  </span>
+
+                  <span class="col-2 center">
+
+                    <div style="display:inline-block">
+
+                      <paper-fab icon="room" on-click="updateCarLocation" disabled$="[[!user]]" animated></paper-fab>
+
+                      <paper-tooltip>Update your car location</paper-tooltip>
+
+                    </div>
+
+                  </span>
+
+               </div>
+
+                <div class="row vert-space">
+
+                  <span class="col-8">
+
+                    <template is="dom-if" if="[[!noteContent]]">
+
+                    <span class="display-content" hidden$="[[!viewMode]]"><b>Add a note:</b></span>
+
+                    </template>
+
+                    <template is="dom-if" if="[[noteContent]]">
+
+                      <span class="display-content" hidden$="[[!viewMode]]">[[noteContent]]</span>
+
+                    </template>
+
+                    <paper-input value="{{noteContent}}" label="Input Note" hidden$="[[viewMode]]" disabled$="[[!user]]"></paper-input>
+
+                    &nbsp;
+
+                  </span>
+
+                  <span class="col-2 center">
+
+                    <div style="display:inline-block">
+
+                      <paper-fab icon="lock-open" on-click="switchMode" hidden$="[[!viewMode]]" disabled$="[[!user]]" animated></paper-fab>
+
+                      <paper-fab icon="save" on-click="switchMode" hidden$="[[viewMode]]" disabled$="[[!user]]" animated></paper-fab>
+
+                      <paper-tooltip hidden$="[[viewMode]]">Save</paper-tooltip>
+
+                      <paper-tooltip hidden$="[[!viewMode]]">Edit your note</paper-tooltip>
+
+                    </div>
+
+                  </span>
+
+                </div>
+
+                <div class="row">
+
+                  <span class="col-10">
+
+                    <span class="col-8 display-content">
+
+                    <b>Get directions:</b>
+
+                  </span>
+
+                  <span class="col-2 center">
+
+                    <div style="display:inline-block">
+
+                      <paper-fab icon="language" on-click="getDirections" disabled$="[[!user]]" animated></paper-fab>
+
+                      <paper-tooltip>Get directions to your car</paper-tooltip>
+
+                    </div>
+
+                  </span>
+
+                </div>
+
+                <div class="row">
+
+                  <span class="col-10">
+
+                    <hr />
+
+                  </span>
+
+                </div>
+
+                <div class="row">
+
+                  <span class="col-5">
+
+                    <b>Distance:</b> <span>[[distance]]</span> miles
+
+                  </span>
+
+                  <span class="col-5 red">
+
+                    <span hidden$="[[!showError]]">
+
+                      Both the user and car locations must be set!
+
+                    </span>
+
+                  </span>
+
+                </div>
+
+              </div>  
+
+            </paper-material>
+
+          </section>
+
+        </iron-pages>
+
+      </div>
+
+    </paper-scroll-header-panel>
+
+    <!-- Uncomment next block to enable Service Worker support (1/2) -->
+    
+    <paper-toast id="caching-complete"
+                 duration="6000"
+                 text="Caching complete! This app will work offline.">
+    </paper-toast>
+
+    <platinum-sw-register auto-register
+                          clients-claim
+                          skip-waiting
+                          on-service-worker-installed="displayInstalledToast">
+      <platinum-sw-cache default-cache-strategy="networkFirst"
+                         precache-file="precache.json">
+      </platinum-sw-cache>
+    </platinum-sw-register>
+    
+
+  </template>
+
+  <!-- build:js scripts/app.js -->
+  <script src="scripts/app.js"></script>
+  <!-- endbuild-->
+
+</body>
+
+</html>

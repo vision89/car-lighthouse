@@ -1,0 +1,23 @@
+{
+  "name": "Car LightHouse",
+  "short_name": "Car LtHouse",
+  "icons": [{
+        "src": "images/touch/apple-icon-120x120.png",
+        "sizes": "120x120",
+        "type": "image/png"
+      }, {
+        "src": "images/touch/apple-icon-152x152.png",
+        "sizes": "152x152",
+        "type": "image/png"
+      }, {
+        "src": "images/touch/apple-icon-144x144.png",
+        "sizes": "144x144",
+        "type": "image/png"
+      }, {
+        "src": "images/touch/android-icon-192x192.png",
+        "sizes": "192x192",
+        "type": "image/png"
+      }],
+  "start_url": "/#!/",
+  "display": "standalone"
+}
