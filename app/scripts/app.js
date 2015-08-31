@@ -222,6 +222,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     };
 
+    app.showHelpModal = function () {
+
+      app.$.helpDialog.toggle();
+
+    };
+
     /**
      * User has succesfully logged in
      * @return {[type]} [description]

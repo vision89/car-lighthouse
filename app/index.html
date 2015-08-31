@@ -16,7 +16,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="generator" content="Polymer Starter Kit" />
-  <title>Car Lightouse</title>
+  <title>Car LightHouse</title>
   <!-- Place favicon.ico in the `app/` directory -->
 
   <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
@@ -79,7 +79,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <template is="dom-if" if="[[!isMobile]]">
 
-            <div class="app-name">Car Lighthouse</div>
+            <span class="app-name">Car Lighthouse</span>
+
+            <div style="display:inline-block">
+
+              <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
+
+              <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
+
+            </div>
 
           </template>
 
@@ -103,13 +111,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             <div class="grid-container">
 
+              <!-- User Loc: <span>[[userLocation.lat]]</span>:<span>[[userLocation.lng]]</span> Car Loc: <span>[[carLocation.lat]]</span>:<span>[[carLocation.lng]]</span> -->
+
               <template is="dom-if" if="[[isMobile]]">
 
                 <div class="row vert-space">
 
                   <span class="col-10 center displayContent">
 
-                    <b>Car Lighthouse</b>
+                    <b>Car Lighthouse</b> 
+
+                    <div style="display:inline-block">
+
+                      <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
+
+                      <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
+
+                    </div>
 
                   </span>
 
@@ -309,6 +327,96 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             </paper-material>
 
+            <paper-dialog id="helpDialog">
+
+              <h2>Car Lighthouse</h2>
+
+              <paper-dialog-scrollable>
+
+                <p>
+
+                  <div>
+
+                    <b>What is car lighthouse?</b>
+
+                  </div>
+
+                  <div>
+
+                    Car lighthouse is a small web app for keeping track of where you last parked your car.
+
+                  </div>
+
+                </p>
+                
+                <p>  
+
+                  <div>
+
+                    <b>How do I track my parking space?</b>
+
+                  </div>
+
+                  <div>
+
+                    When you park, click the update your car's location fab.  This will store the location you are in at that moment, which should be in your car.
+                  
+                  </div>
+
+                </p>
+
+                <p>  
+
+                  <div>
+
+                    <b>Why do I need to add a note?</b>
+
+                  </div>
+
+                  <div>
+
+                    Notes are tid-bits of info to help you remember your parking space.  You could note 'Level 2, spot 44' for instance.
+                  
+                  </div>
+
+                </p>
+
+                <p>  
+
+                  <div>
+
+                    <b>What do I do if I'm not sure where I parked?</b>
+
+                  </div>
+
+                  <div>
+
+                    Car lighthouse is constantly tracking your location.  If you click the get directions fab this will open up google maps and show directions from your location to the last car location you checked in.
+                  
+                  </div>
+
+                </p>
+
+                <p>  
+
+                  <div>
+
+                    <b>What are the two checkmarks?</b>
+
+                  </div>
+
+                  <div>
+
+                    The checkmark on the left means your car location is stored, and the checkmark on the right means your location has been obtained.  Both checkmarks must be green for the show directions fab to work.
+                  
+                  </div>
+
+                </p>
+
+              </paper-dialog-scrollable>
+
+            </paper-dialog>
+
           </section>
 
         </iron-pages>
@@ -319,7 +427,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     
-    <paper-toast id="caching-complete"
+    <!-- <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">
     </paper-toast>
@@ -331,7 +439,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <platinum-sw-cache default-cache-strategy="networkFirst"
                          precache-file="precache.json">
       </platinum-sw-cache>
-    </platinum-sw-register>
+    </platinum-sw-register> -->
     
 
   </template>
