@@ -99,7 +99,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <div class="content">
         <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-          <section data-route="home">     
+          <section data-route="home">
+            
+            <polymer-location coords="{{coords}}" watch-location="[[watchLocation]]" unset-watch="[[unsetWatch]]" high-accuracy="true"></polymer-location>
 
             <!-- Firebase helpers -->
             <firebase-auth id="firebaseLogin" location="[[firebaseUrl]]" provider="google" user="{{user}}" on-login="loggedIn" on-logout="loggedOut"></firebase-auth>
@@ -110,8 +112,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             <!-- End firebase helpers -->
 
             <div class="grid-container">
-
-              <!-- User Loc: <span>[[userLocation.lat]]</span>:<span>[[userLocation.lng]]</span> Car Loc: <span>[[carLocation.lat]]</span>:<span>[[carLocation.lng]]</span> -->
 
               <template is="dom-if" if="[[isMobile]]">
 
@@ -173,39 +173,31 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                     <template is="dom-if" if="[[carLocationSet]]">
 
-                      <iron-icon icon="done" disabled$="[[!carLocation]]" class="green" ></iron-icon>
+                      <iron-icon icon="done" class="green" ></iron-icon>
+
+                      <paper-tooltip>Car location set</paper-tooltip>
 
                     </template>
 
                     <template is="dom-if" if="[[!carLocationSet]]">
 
-                      <iron-icon icon="done" disabled$="[[!carLocation]]" class="red"></iron-icon>
+                      <iron-icon icon="done" class="red"></iron-icon>
+
+                      <paper-tooltip>Car location not set</paper-tooltip>
 
                     </template>
-
-                    <paper-tooltip>Car location set</paper-tooltip>
 
                   </span>
 
                   <span class="col-1">
 
-                    <template is="dom-if" if="[[userLocationSet]]">
-
-                      <iron-icon icon="done" disabled$="[[!userLocation]]" class="green" ></iron-icon>
-
-                    </template>
-
-                    <template is="dom-if" if="[[!userLocationSet]]">
-
-                      <iron-icon icon="done" disabled$="[[!userLocation]]" class="red" ></iron-icon>
-
-                    </template>
-
-                    <paper-tooltip>User location set</paper-tooltip>
+                    <user-location-checkmark lat="[[coords.latitude]]" lng="[[coords.longitude]]"></user-location-checkmark>
 
                   </span>
 
                 </div>
+
+                <!-- User location: <span>[[coords.latitude]]</span>, <span>[[coords.longitude]]</span> -->
 
                 <div class="row vert-space">
 

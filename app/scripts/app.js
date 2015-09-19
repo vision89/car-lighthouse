@@ -20,15 +20,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.noteContent = '';
   app.viewMode = true;
   app.distance = 0;
-  app.userLocationSet = false;
   app.carLocationSet = false;
   app.showError = false;
   app.isMobile = false;
-  app.userLocation = {
-
-    lat: 0,
-    lng: 0
-  };
+  app.watchLocation = false;
+  app.unsetWatch = false;
 
   app.parkingDescription = {
 
@@ -81,47 +77,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     }
 
-    function _updateLocation () {
-
-      //Look for user location
-      if ( navigator.geolocation && app.user !== undefined && app.user !== null ) {
-
-        navigator.geolocation.getCurrentPosition( function ( position ) {
-
-          app.set( 'userLocation.lat', position.coords.latitude );
-          app.set( 'userLocation.lng', position.coords.longitude );
-
-          app.userLocationSet = true;
-
-        });
-
-      } else {
-
-        //Device is not compatible
-
-      }
-
-    }
-
     /**
      * Update the distance every 5 seconds
      * @return {[type]} [description]
      */
-    function _computeDistanceLoop () {
+    function _computeDistanceLoop ( timeout ) {
 
       setTimeout( function () {
 
-        if ( app.user !== undefined && app.user !== null ) {
+        if ( app.user !== undefined && app.user !== null && app.coords ) {
 
-          _updateLocation();
+          _computeDistance( { 'lat': app.coords.latitude, 'lng': app.coords.longitude }, app.carLocation );
 
-          _computeDistance( app.userLocation, app.carLocation );
-
-          _computeDistanceLoop();
+          _computeDistanceLoop( 5000 );
 
         }
 
-      }, 5000 );
+      }, timeout );
 
     }
 
@@ -151,12 +123,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       app.carLocation = {
 
-        'lat': app.userLocation.lat,
-        'lng': app.userLocation.lng
+        'lat': app.coords.latitude,
+        'lng': app.coords.longitude
 
       };
 
-      _computeDistance( app.userLocation, app.carLocation );
+      _computeDistance( { 'lat': app.coords.latitude, 'lng': app.coords.longitude }, app.carLocation );
 
     };
 
@@ -180,11 +152,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     };
 
+    /**
+     * Get directions from the user to the car
+     * @return {[type]} [description]
+     */
     app.getDirections = function () {
 
-      if ( app.carLocationSet === true && app.userLocationSet === true ) {
+      if ( app.carLocationSet === true && app.coords ) {
 
-        var url = 'http://maps.google.com/maps?saddr=' + app.userLocation.lat + ',' + app.userLocation.lng + '&daddr=' + app.carLocation.lat + ',' + app.carLocation.lng + '&mode=walking';
+        var url = 'http://maps.google.com/maps?saddr=' + app.coords.latitude + ',' + app.coords.longitude + '&daddr=' + app.carLocation.lat + ',' + app.carLocation.lng + '&mode=walking';
 
         var win = window.open(url, '_blank');
         win.focus();
@@ -237,13 +213,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.signedIn = true;
       app.carDocumentUrl = app.firebaseUrl + '/' + app.user.uid + '/car';
       app.noteDocumentUrl = app.firebaseUrl + '/' + app.user.uid + '/note';
+      app.watchLocation = true;
 
       //Kick off the location updates
       setTimeout( function () {
 
-        _updateLocation();
-
-        _computeDistanceLoop();
+        _computeDistanceLoop( 1000 );
 
       });
 
@@ -255,6 +230,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
     app.loggedOut = function () {
 
+        app.unsetWatch = true;
+        app.watchLocation = false;
         app.viewMode = true;
         app.signedIn = false;
         app.carDocumentUrl = app.firebaseUrl;
@@ -263,7 +240,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         app.note = {};
         app.carLocation = {};
         app.carLocationSet = false;
-        app.userLocationSet = false;
         app.distance = 0;
         app.showError = false;
 
