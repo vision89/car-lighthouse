@@ -23,8 +23,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   app.carLocationSet = false;
   app.showError = false;
   app.isMobile = false;
-  app.watchLocation = false;
-  app.unsetWatch = false;
 
   app.parkingDescription = {
 
@@ -105,7 +103,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       if ( app.signedIn === false ) {
 
-        app.$.firebaseLogin.login( params );
+        app.$.firebaseLogin.login();
 
       } else {
 
@@ -213,7 +211,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       app.signedIn = true;
       app.carDocumentUrl = app.firebaseUrl + '/' + app.user.uid + '/car';
       app.noteDocumentUrl = app.firebaseUrl + '/' + app.user.uid + '/note';
-      app.watchLocation = true;
 
       //Kick off the location updates
       setTimeout( function () {
@@ -230,8 +227,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
      */
     app.loggedOut = function () {
 
-        app.unsetWatch = true;
-        app.watchLocation = false;
+        var locationElement = document.querySelector( '#polymer-location' );
+        locationElement.unsetWatch();
         app.viewMode = true;
         app.signedIn = false;
         app.carDocumentUrl = app.firebaseUrl;

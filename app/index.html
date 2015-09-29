@@ -101,7 +101,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
           <section data-route="home">
             
-            <polymer-location coords="{{coords}}" watch-location="[[watchLocation]]" unset-watch="[[unsetWatch]]" high-accuracy="true"></polymer-location>
+            <polymer-location id="polymer-location" coords="{{coords}}" watch-location high-accuracy="true"></polymer-location>
 
             <!-- Firebase helpers -->
             <firebase-auth id="firebaseLogin" location="[[firebaseUrl]]" provider="google" user="{{user}}" on-login="loggedIn" on-logout="loggedOut"></firebase-auth>
