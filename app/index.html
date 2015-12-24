@@ -71,13 +71,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <span class="flex"></span>
 
-        <!-- Sign In Button -->
-        <google-signin-button  on-google-button-clicked="signInClicked" signed-in="[[signedIn]]"></google-signin-button>
-
         <!-- Application name -->
         <div class="middle center horizontal layout">
 
-          <template is="dom-if" if="[[!isMobile]]">
+          <template is="dom-if" if="[[!carData.isMobile]]">
 
             <span class="app-name">Car Lighthouse</span>
 
@@ -97,321 +94,312 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
       <!-- Main Content -->
       <div class="content">
-        <iron-pages attr-for-selected="data-route" selected="{{route}}">
 
-          <section data-route="home">
-            
-            <polymer-location id="polymer-location" coords="{{coords}}" watch-location high-accuracy="true"></polymer-location>
+        <polymer-location id="polymer-location" coords="{{coords}}" watch-location high-accuracy="true"></polymer-location>
 
-            <!-- Firebase helpers -->
-            <firebase-auth id="firebaseLogin" location="[[firebaseUrl]]" provider="google" user="{{user}}" on-login="loggedIn" on-logout="loggedOut"></firebase-auth>
+        <!-- Local Storage -->
+        <iron-localstorage name="car-ligthouse"
+          value="{{carData}}"
+          on-iron-localstorage-load-empty="initializeDefaultData"
+          on-iron-localstorage-load="initializeData">
+        </iron-localstorage>
+        <!-- End Local Storage-->
 
-            <firebase-document location="[[carDocumentUrl]]" data="{{carLocation}}" on-firebase-value="setCarLocation" id="firebaseCarLocation"></firebase-document>
+        <div class="grid-container">
 
-            <firebase-document location="[[noteDocumentUrl]]" data="{{note}}" on-firebase-value="setNote"></firebase-document>
-            <!-- End firebase helpers -->
+          <template is="dom-if" if="[[carData.isMobile]]">
 
-            <div class="grid-container">
+            <div class="row vert-space">
 
-              <template is="dom-if" if="[[isMobile]]">
+              <span class="col-10 center displayContent">
 
-                <div class="row vert-space">
+                <b>Car Lighthouse</b> 
 
-                  <span class="col-10 center displayContent">
+                <div style="display:inline-block">
 
-                    <b>Car Lighthouse</b> 
+                  <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
 
-                    <div style="display:inline-block">
-
-                      <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
-
-                      <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
-
-                    </div>
-
-                  </span>
+                  <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
 
                 </div>
+
+              </span>
+
+            </div>
+
+          </template>
+
+          <div class="row vert-space">
+
+            <span class="col-10 center">
+
+              <template is="dom-if" if="[[carData.isMobile]]">
+
+                <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=9&l=ez&f=ifr&f=ifr&linkID=DQGNXMWNPMNATOXY&internal=1" width="180" height="150" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
 
               </template>
 
-              <div class="row vert-space">
+              <template is="dom-if" if="[[!carData.isMobile]]">
 
-                <span class="col-10 center">
+                <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=13&l=ez&f=ifr&f=ifr&linkID=ZEWXDMQACYX7JH4D&internal=1" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
 
-                  <template is="dom-if" if="[[isMobile]]">
+              </template>
 
-                    <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=9&l=ez&f=ifr&f=ifr&linkID=DQGNXMWNPMNATOXY&internal=1" width="180" height="150" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
+            </span>
 
-                  </template>
+         </div>
 
-                  <template is="dom-if" if="[[!isMobile]]">
+        </div>   
 
-                    <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=13&l=ez&f=ifr&f=ifr&linkID=ZEWXDMQACYX7JH4D&internal=1" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
+        <paper-material elevation="1">
 
-                  </template>
+          <div class="grid-container">
+
+            <div class="row">
+
+              <span class="col-8">
+
+                &nbsp;
+
+              </span>
+
+              <span class="col-1">
+
+                <template is="dom-if" if="[[carData.carLocation]]">
+
+                  <iron-icon icon="done" class="green" ></iron-icon>
+
+                  <paper-tooltip>Car location set</paper-tooltip>
+
+                </template>
+
+                <template is="dom-if" if="[[!carData.carLocation]]">
+
+                  <iron-icon icon="done" class="red"></iron-icon>
+
+                  <paper-tooltip>Car location not set</paper-tooltip>
+
+                </template>
+
+              </span>
+
+              <span class="col-1">
+
+                <user-location-checkmark lat="[[coords.latitude]]" lng="[[coords.longitude]]"></user-location-checkmark>
+
+              </span>
+
+            </div>
+
+            <!-- User location: <span>[[coords.latitude]]</span>, <span>[[coords.longitude]]</span> -->
+
+            <div class="row vert-space">
+
+              <span class="col-8 display-content">
+
+                <b>Update your car's location:</b>
+
+              </span>
+
+              <span class="col-2 center">
+
+                <div style="display:inline-block">
+
+                  <paper-fab icon="room" on-click="updateCarLocation" animated></paper-fab>
+
+                  <paper-tooltip>Update your car location</paper-tooltip>
+
+                </div>
+
+              </span>
+
+            </div>
+
+            <div class="row vert-space">
+
+              <span class="col-10">
+
+                <span class="col-8 display-content">
+
+                <b>Get directions:</b>
+
+              </span>
+
+              <span class="col-2 center">
+
+                <div style="display:inline-block">
+
+                  <paper-fab icon="language" on-click="getDirections" animated></paper-fab>
+
+                  <paper-tooltip>Get directions to your car</paper-tooltip>
+
+                </div>
+
+              </span>
+
+            </div>
+
+            <div class="row">
+
+              <span class="col-8">
+
+                <template is="dom-if" if="[[!carData.noteContent]]">
+
+                  <p>
+
+                    <span class="display-content" hidden$="[[!carData.viewMode]]"><b>Add a note:</b></span>
+
+                  </p>
+
+                </template>
+
+                <template is="dom-if" if="[[carData.noteContent]]">
+
+                  <p>
+
+                    <span class="display-content" hidden$="[[!carData.viewMode]]">[[carData.noteContent]]</span>
+
+                  </p>
+
+                </template>
+
+                <paper-input value="{{carData.noteContent}}" label="Input Note" hidden$="[[carData.viewMode]]"></paper-input>
+
+                &nbsp;
+
+              </span>
+
+              <span class="col-2 center">
+
+                <div style="display:inline-block">
+
+                  <paper-fab icon="lock-open" on-click="switchMode" hidden$="[[!carData.viewMode]]" animated></paper-fab>
+
+                  <paper-fab icon="save" on-click="switchMode" hidden$="[[carData.viewMode]]" animated></paper-fab>
+
+                  <paper-tooltip hidden$="[[carData.viewMode]]">Save</paper-tooltip>
+
+                  <paper-tooltip hidden$="[[!carData.viewMode]]">Edit your note</paper-tooltip>
+
+                </div>
+
+              </span>
+
+            </div>
+
+            <div class="row space">
+
+              <span class="col-5">
+
+                <b>Distance:</b> <span>[[distance]]</span> miles
+
+              </span>
+
+              <span class="col-5 red">
+
+                <span hidden$="[[!carData.showError]]">
+
+                  Both the user and car locations must be set!
 
                 </span>
 
-             </div>
+              </span>
 
-            </div>   
+            </div>
 
-            <paper-material elevation="1">
+          </div>  
 
-              <div class="grid-container">
+        </paper-material>
 
-                <div class="row">
+        <paper-dialog id="helpDialog">
 
-                  <span class="col-8">
+          <h2>Car Lighthouse</h2>
 
-                    &nbsp;
+          <paper-dialog-scrollable>
 
-                  </span>
+            <p>
 
-                  <span class="col-1">
+              <div>
 
-                    <template is="dom-if" if="[[carLocationSet]]">
+                <b>What is car lighthouse?</b>
 
-                      <iron-icon icon="done" class="green" ></iron-icon>
+              </div>
 
-                      <paper-tooltip>Car location set</paper-tooltip>
+              <div>
 
-                    </template>
+                Car lighthouse is a small web app for keeping track of where you last parked your car.
 
-                    <template is="dom-if" if="[[!carLocationSet]]">
+              </div>
 
-                      <iron-icon icon="done" class="red"></iron-icon>
+            </p>
+            
+            <p>  
 
-                      <paper-tooltip>Car location not set</paper-tooltip>
+              <div>
 
-                    </template>
+                <b>How do I track my parking space?</b>
 
-                  </span>
+              </div>
 
-                  <span class="col-1">
+              <div>
 
-                    <user-location-checkmark lat="[[coords.latitude]]" lng="[[coords.longitude]]"></user-location-checkmark>
+                When you park, click the update your car's location fab.  This will store the location you are in at that moment, which should be in your car.
+              
+              </div>
 
-                  </span>
+            </p>
 
-                </div>
+            <p>  
 
-                <!-- User location: <span>[[coords.latitude]]</span>, <span>[[coords.longitude]]</span> -->
+              <div>
 
-                <div class="row vert-space">
+                <b>Why do I need to add a note?</b>
 
-                  <span class="col-8 display-content">
+              </div>
 
-                    <b>Update your car's location:</b>
+              <div>
 
-                  </span>
+                Notes are tid-bits of info to help you remember your parking space.  You could note 'Level 2, spot 44' for instance.
+              
+              </div>
 
-                  <span class="col-2 center">
+            </p>
 
-                    <div style="display:inline-block">
+            <p>  
 
-                      <paper-fab icon="room" on-click="updateCarLocation" disabled$="[[!user]]" animated></paper-fab>
+              <div>
 
-                      <paper-tooltip>Update your car location</paper-tooltip>
+                <b>What do I do if I'm not sure where I parked?</b>
 
-                    </div>
+              </div>
 
-                  </span>
+              <div>
 
-               </div>
+                Car lighthouse is constantly tracking your location.  If you click the get directions fab this will open up google maps and show directions from your location to the last car location you checked in.
+              
+              </div>
 
-                <div class="row vert-space">
+            </p>
 
-                  <span class="col-8">
+            <p>  
 
-                    <template is="dom-if" if="[[!noteContent]]">
+              <div>
 
-                    <span class="display-content" hidden$="[[!viewMode]]"><b>Add a note:</b></span>
+                <b>What are the two checkmarks?</b>
 
-                    </template>
+              </div>
 
-                    <template is="dom-if" if="[[noteContent]]">
+              <div>
 
-                      <span class="display-content" hidden$="[[!viewMode]]">[[noteContent]]</span>
+                The checkmark on the left means your car location is stored, and the checkmark on the right means your location has been obtained.  Both checkmarks must be green for the show directions fab to work.
+              
+              </div>
 
-                    </template>
+            </p>
 
-                    <paper-input value="{{noteContent}}" label="Input Note" hidden$="[[viewMode]]" disabled$="[[!user]]"></paper-input>
+          </paper-dialog-scrollable>
 
-                    &nbsp;
-
-                  </span>
-
-                  <span class="col-2 center">
-
-                    <div style="display:inline-block">
-
-                      <paper-fab icon="lock-open" on-click="switchMode" hidden$="[[!viewMode]]" disabled$="[[!user]]" animated></paper-fab>
-
-                      <paper-fab icon="save" on-click="switchMode" hidden$="[[viewMode]]" disabled$="[[!user]]" animated></paper-fab>
-
-                      <paper-tooltip hidden$="[[viewMode]]">Save</paper-tooltip>
-
-                      <paper-tooltip hidden$="[[!viewMode]]">Edit your note</paper-tooltip>
-
-                    </div>
-
-                  </span>
-
-                </div>
-
-                <div class="row">
-
-                  <span class="col-10">
-
-                    <span class="col-8 display-content">
-
-                    <b>Get directions:</b>
-
-                  </span>
-
-                  <span class="col-2 center">
-
-                    <div style="display:inline-block">
-
-                      <paper-fab icon="language" on-click="getDirections" disabled$="[[!user]]" animated></paper-fab>
-
-                      <paper-tooltip>Get directions to your car</paper-tooltip>
-
-                    </div>
-
-                  </span>
-
-                </div>
-
-                <div class="row">
-
-                  <span class="col-10">
-
-                    <hr />
-
-                  </span>
-
-                </div>
-
-                <div class="row">
-
-                  <span class="col-5">
-
-                    <b>Distance:</b> <span>[[distance]]</span> miles
-
-                  </span>
-
-                  <span class="col-5 red">
-
-                    <span hidden$="[[!showError]]">
-
-                      Both the user and car locations must be set!
-
-                    </span>
-
-                  </span>
-
-                </div>
-
-              </div>  
-
-            </paper-material>
-
-            <paper-dialog id="helpDialog">
-
-              <h2>Car Lighthouse</h2>
-
-              <paper-dialog-scrollable>
-
-                <p>
-
-                  <div>
-
-                    <b>What is car lighthouse?</b>
-
-                  </div>
-
-                  <div>
-
-                    Car lighthouse is a small web app for keeping track of where you last parked your car.
-
-                  </div>
-
-                </p>
-                
-                <p>  
-
-                  <div>
-
-                    <b>How do I track my parking space?</b>
-
-                  </div>
-
-                  <div>
-
-                    When you park, click the update your car's location fab.  This will store the location you are in at that moment, which should be in your car.
-                  
-                  </div>
-
-                </p>
-
-                <p>  
-
-                  <div>
-
-                    <b>Why do I need to add a note?</b>
-
-                  </div>
-
-                  <div>
-
-                    Notes are tid-bits of info to help you remember your parking space.  You could note 'Level 2, spot 44' for instance.
-                  
-                  </div>
-
-                </p>
-
-                <p>  
-
-                  <div>
-
-                    <b>What do I do if I'm not sure where I parked?</b>
-
-                  </div>
-
-                  <div>
-
-                    Car lighthouse is constantly tracking your location.  If you click the get directions fab this will open up google maps and show directions from your location to the last car location you checked in.
-                  
-                  </div>
-
-                </p>
-
-                <p>  
-
-                  <div>
-
-                    <b>What are the two checkmarks?</b>
-
-                  </div>
-
-                  <div>
-
-                    The checkmark on the left means your car location is stored, and the checkmark on the right means your location has been obtained.  Both checkmarks must be green for the show directions fab to work.
-                  
-                  </div>
-
-                </p>
-
-              </paper-dialog-scrollable>
-
-            </paper-dialog>
-
-          </section>
-
-        </iron-pages>
+        </paper-dialog>
 
       </div>
 
@@ -419,7 +407,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Uncomment next block to enable Service Worker support (1/2) -->
     
-    <!-- <paper-toast id="caching-complete"
+    <paper-toast id="caching-complete"
                  duration="6000"
                  text="Caching complete! This app will work offline.">
     </paper-toast>
@@ -431,7 +419,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       <platinum-sw-cache default-cache-strategy="networkFirst"
                          precache-file="precache.json">
       </platinum-sw-cache>
-    </platinum-sw-register> -->
+    </platinum-sw-register>
     
 
   </template>
