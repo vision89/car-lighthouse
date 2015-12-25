@@ -48,6 +48,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <link rel="stylesheet" href="styles/main.css">
   <!-- endbuild-->
 
+  <!-- build:css bower_components/animate.css/animate.min.css -->
+  <link rel="stylesheet" href="bower_components/animate.css/animate.min.css">
+  <!-- endbuild -->
+
   <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
   <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <!-- endbuild -->
@@ -67,26 +71,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <paper-header-panel mode="seamed">
 
       <!-- Main Toolbar -->
-      <paper-toolbar id="mainToolbar">
+      <paper-toolbar id="mainToolbar" class="animated slideInDown">
 
         <span class="flex"></span>
 
         <!-- Application name -->
         <div class="middle center horizontal layout">
 
-          <template is="dom-if" if="[[!carData.isMobile]]">
+          <span class="app-name">Car Lighthouse</span>
 
-            <span class="app-name">Car Lighthouse</span>
+          <span class="beta">&nbsp;*beta</span>
 
-            <div style="display:inline-block">
+          <div style="display:inline-block">
 
-              <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
+            <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
 
-              <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
+            <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
 
-            </div>
-
-          </template>
+          </div>
 
         </div>
 
@@ -107,43 +109,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         <div class="grid-container">
 
-          <template is="dom-if" if="[[carData.isMobile]]">
-
-            <div class="row vert-space">
-
-              <span class="col-10 center displayContent">
-
-                <b>Car Lighthouse</b> 
-
-                <div style="display:inline-block">
-
-                  <iron-icon icon="help-outline" class="help-style" on-click="showHelpModal"></iron-icon>
-
-                  <paper-tooltip>What is car lighthouse and how does it work?</paper-tooltip>
-
-                </div>
-
-              </span>
-
-            </div>
-
-          </template>
-
           <div class="row vert-space">
 
             <span class="col-10 center">
-
-              <template is="dom-if" if="[[carData.isMobile]]">
-
-                <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=9&l=ez&f=ifr&f=ifr&linkID=DQGNXMWNPMNATOXY&internal=1" width="180" height="150" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
-
-              </template>
-
-              <template is="dom-if" if="[[!carData.isMobile]]">
-
-                <iframe src="//rcm-na.amazon-adsystem.com/e/cm?t=scopelog-20&o=1&p=13&l=ez&f=ifr&f=ifr&linkID=ZEWXDMQACYX7JH4D&internal=1" width="468" height="60" scrolling="no" marginwidth="0" marginheight="0" border="0" frameborder="0" style="border:none;"></iframe>
-
-              </template>
 
             </span>
 
@@ -151,7 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         </div>   
 
-        <paper-material elevation="1">
+        <paper-material elevation="1" class="animated slideInUp">
 
           <div class="grid-container">
 

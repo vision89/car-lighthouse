@@ -32,7 +32,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       viewMode: true,
       carLocation: null,
       showError: false,
-      isMobile: false,
       noteContent: ''
 
     });
@@ -57,13 +56,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   window.addEventListener('WebComponentsReady', function() {
 
     app.distance = 0;
-
-    //Detect if were on a mobile browser to decrease ad size
-    if( /Android|webOS|iPhone|iPod|BlackBerry/i.test( navigator.userAgent ) ) {
-
-      app.set( 'carData.isMobile', true );
-
-    }
 
     var params = { scope: 'email' };
 
